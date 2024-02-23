@@ -4,4 +4,5 @@
 
 ## Baeldung
 
+* [Groovy Lists](baeldung/groovy-lists.md)
 * [Groovy Maps](baeldung/groovy-maps.md)
