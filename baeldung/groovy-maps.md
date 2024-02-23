@@ -178,3 +178,108 @@ assertTrue(map.every{it -> it.value instanceof String} == false)
 ```groovy
 assertTrue(map.any{it -> it.value instanceof String} == true)
 ```
+
+## 8. Трансформация и сборка коллекции
+
+Иногда нам может потребоваться преобразовать записи в карте в новые значения. Используя методы `collect()` и `collectEntries()`, можно преобразовывать и собирать записи в коллекцию Collection или карту Map соответственно.
+
+Давайте посмотрим на несколько примеров. Учитывая карту идентификаторов сотрудников и самих сотрудников:
+
+```groovy
+def map = [
+  1: [name:"Jerry", age: 42, city: "New York"],
+  2: [name:"Long", age: 25, city: "New York"],
+  3: [name:"Dustin", age: 29, city: "New York"],
+  4: [name:"Dustin", age: 34, city: "New York"]]
+```
+
+Мы можем собрать имена всех сотрудников в список с помощью функции `collect()`:
+
+```groovy
+def names = map.collect{entry -> entry.value.name}
+assertTrue(names == ["Jerry", "Long", "Dustin", "Dustin"])
+```
+
+Затем, если нас интересует уникальный набор имен, мы можем указать коллекцию, передав объект Collection:
+
+```groovy
+def uniqueNames = map.collect([] as HashSet){entry -> entry.value.name}
+assertTrue(uniqueNames == ["Jerry", "Long", "Dustin"] as Set)
+```
+
+Если мы хотим изменить имена сотрудников на карте со строчных на прописные, мы можем использовать collectEntries. Этот метод возвращает карту преобразованных значений:
+
+```groovy
+def idNames = map.collectEntries{key, value -> [key, value.name]}
+assertTrue(idNames == [1:"Jerry", 2:"Long", 3:"Dustin", 4:"Dustin"])
+```
+
+Наконец, также **можно использовать методы collect в сочетании с методами find и findAll** для преобразования отфильтрованных результатов:
+
+```groovy
+def below30Names = map.findAll{it.value.age < 30}.collect{key, value -> value.name}
+assertTrue(below30Names == ["Long", "Dustin"])
+```
+
+Здесь мы найдем всех сотрудников в возрасте от 20 до 30 лет и соберем их в карте.
+
+## 9. Группировка
+
+Иногда нам может потребоваться сгруппировать некоторые элементы карты в подкарты на основе условия.
+
+Метод `groupBy()` возвращает карту карт, и каждая карта содержит пары ключ-значение, которые дают один и тот же результат для данного условия:
+
+```groovy
+def map = [1:20, 2: 40, 3: 11, 4: 93]
+     
+def subMap = map.groupBy{it.value % 2}
+assertTrue(subMap == [0:[1:20, 2:40], 1:[3:11, 4:93]])
+```
+
+Другой способ создания подкарт — использование subMap(). Он отличается от groupBy() тем, что позволяет группировать только по ключам:
+
+```groovy
+def keySubMap = map.subMap([1,2])
+assertTrue(keySubMap == [1:20, 2:40])
+```
+
+В этом случае записи для ключей 1 и 2 возвращаются в новой карте, а все остальные записи отбрасываются.
+
+## 10. Сортировка
+
+Обычно при сортировке нам может потребоваться отсортировать записи на карте по ключу или значению, или по тому и другому. Groovy предоставляет для этой цели метод sort().
+
+Дана карта:
+
+```groovy
+def map = [ab:20, a: 40, cb: 11, ba: 93]
+```
+
+Если сортировку необходимо выполнить по ключу, мы будем использовать метод sort() без аргументов, который основан на естественном упорядочении:
+
+```groovy
+def naturallyOrderedMap = map.sort()
+assertTrue([a:40, ab:20, ba:93, cb:11] == naturallyOrderedMap)
+```
+
+Или мы можем использовать метод sort(Comparator) для обеспечения логики сравнения:
+
+```groovy
+def compSortedMap = map.sort({k1, k2 -> k1 <=> k2} as Comparator)
+assertTrue([a:40, ab:20, ba:93, cb:11] == compSortedMap)
+```
+
+Далее, чтобы выполнить сортировку по ключу, значению или по тому и другому, мы можем предоставить условие замыкания Closure в sort():
+
+```groovy
+def cloSortedMap = map.sort({it1, it2 -> it1.value <=> it1.value})
+assertTrue([cb:11, ab:20, a:40, ba:93] == cloSortedMap)
+```
+
+## 11. Заключение
+
+В этой статье мы узнали, как создавать карты Map в Groovy. Затем мы рассмотрели различные способы добавления, извлечения и удаления элементов из карты.
+
+Наконец, мы рассмотрели готовые методы Groovy для выполнения общих операций, таких как фильтрация, поиск, преобразование и сортировка.
+
+Как всегда, примеры, рассмотренные в этой статье, можно найти на GitHub.
