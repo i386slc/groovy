@@ -108,3 +108,9 @@ assertTrue(minusMap == [1:20])
 ```
 
 ## 6. Итерация по записям
+
+Мы можем [перебирать записи](https://www.baeldung.com/groovy-map-iterating), используя методы `each()` и `eachWithIndex()`.
+
+Метод `each()` предоставляет неявные параметры, такие как entry, key и value, которые соответствуют текущей записи.
+
+Метод `eachWithIndex()` также предоставляет индекс в дополнение к Entry. Оба метода принимают замыкание [Closure](https://www.baeldung.com/groovy-closures) в качестве аргумента.
