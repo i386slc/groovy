@@ -5,6 +5,7 @@
 ## Baeldung
 
 * [Работа с JSON в Groovy](baeldung/rabota-s-json-v-groovy.md)
-* [Кратко о итерации Map](baeldung/kratko-o-iteracii-map.md)
+* [Кратко об итерации Map](baeldung/kratko-ob-iteracii-map.md)
 * [Groovy Lists](baeldung/groovy-lists.md)
+* [Кратко о работе с веб-службами](baeldung/kratko-o-rabote-s-veb-sluzhbami.md)
 * [Groovy Maps](baeldung/groovy-maps.md)
